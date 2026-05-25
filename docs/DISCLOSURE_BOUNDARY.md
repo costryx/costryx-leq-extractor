@@ -7,7 +7,7 @@ with §V.G and §X.C of the source paper:
 > Hsu, C.-Y. (2026). *256 GT/s PAM4 Channel Validation Under a Fixed
 > Reference Plane: Differential-Mode Phase-Residual Analytical Theory
 > of Equivalent Spatial Length and Its Application to Sub-THz
-> Interconnect Characterization* (V3.6). TechRxiv. DOI: [pending].
+> Interconnect Characterization* (V4.0). Zenodo. DOI: [10.5281/zenodo.20382496](https://doi.org/10.5281/zenodo.20382496).
 
 ---
 
@@ -112,5 +112,6 @@ not constitute joint licensing or shared IP authorization.
 
 ---
 
-*Last updated: 2026-05-25*
+*Last updated: 2026-05-26*  
+*Aligned with paper V4.0 (Zenodo DOI: [10.5281/zenodo.20382496](https://doi.org/10.5281/zenodo.20382496))*  
 *Maintained by Costryx*
