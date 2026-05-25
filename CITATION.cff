@@ -1,49 +1,35 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite both the methodology paper and this software."
-type: software
 title: "costryx-leq-extractor: Official Reference Implementation of the L_eq Extraction Framework"
-version: "0.1.0"
-date-released: "2026-05-26"
 authors:
   - family-names: "Hsu"
     given-names: "Chin-Yu"
     orcid: "https://orcid.org/0009-0009-6267-7897"
-    affiliation: "Independent Researcher"
-license: Apache-2.0
+    email: "chinyu@costryx.net"
+version: "0.1.0"
+date-released: "2026-05-26"
+license: "Apache-2.0"
 repository-code: "https://github.com/costryx/costryx-leq-extractor"
-url: "https://doi.org/10.5281/zenodo.20382496"
-identifiers:
-  - type: doi
-    value: "10.5281/zenodo.20382496"
-    description: "Zenodo paper DOI (V4.0, specific version)"
-  - type: doi
-    value: "10.5281/zenodo.20382495"
-    description: "Zenodo paper concept DOI (all versions)"
+url: "https://doi.org/10.5281/zenodo.20384917"
+doi: "10.5281/zenodo.20384917"
+type: software
 keywords:
-  - "signal integrity"
   - "sub-THz interconnect"
-  - "256 GT/s PAM4"
-  - "PCIe 8.0"
-  - "metrology"
-  - "Equivalent Spatial Length"
+  - "equivalent spatial length"
   - "L_eq"
-  - "Geometric Convergence Index"
-  - "GCI"
-  - "Differential-Mode Phase-Residual Analytical Theory"
-  - "GUM uncertainty"
-  - "ISO/IEC 17025"
-  - "SHA-256"
-  - "FIPS PUB 180-4"
+  - "PAM4 channel validation"
+  - "256 GT/s"
+  - "signal integrity"
+  - "S-parameter"
+  - "scikit-rf"
 preferred-citation:
   type: article
   authors:
     - family-names: "Hsu"
       given-names: "Chin-Yu"
       orcid: "https://orcid.org/0009-0009-6267-7897"
-      affiliation: "Independent Researcher"
   title: "256 GT/s PAM4 Channel Validation Under a Fixed Reference Plane: Differential-Mode Phase-Residual Analytical Theory of Equivalent Spatial Length and Its Application to Sub-THz Interconnect Characterization"
   year: 2026
-  month: 5
   publisher:
     name: "Zenodo"
   doi: "10.5281/zenodo.20382496"
