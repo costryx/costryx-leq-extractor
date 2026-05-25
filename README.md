@@ -2,7 +2,7 @@
 
 [![Python tests](https://github.com/costryx/costryx-leq-extractor/actions/workflows/python-tests.yml/badge.svg?branch=main)](https://github.com/costryx/costryx-leq-extractor/actions/workflows/python-tests.yml)
 [![Paper DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20382496.svg)](https://doi.org/10.5281/zenodo.20382496)
-[![Software DOI](https://img.shields.io/badge/Software_DOI-pending-lightgrey.svg)]()
+[![Software DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20384917.svg)](https://doi.org/10.5281/zenodo.20384917)
 [![License](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-foundational--reference-orange.svg)]()
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)]()
@@ -129,11 +129,12 @@ If you use this software, please cite both the methodology paper and this reposi
   year      = {2026},
   publisher = {Zenodo},
   version   = {v0.1.0},
-  url       = {https://github.com/costryx/costryx-leq-extractor}
+  doi       = {10.5281/zenodo.20384917},
+  url       = {https://doi.org/10.5281/zenodo.20384917}
 }
 ```
 
-> A software-specific Zenodo DOI will be assigned after the v0.1.0 release is archived via the Zenodo–GitHub integration. The `@software` BibTeX entry will be amended with that DOI in a subsequent maintenance commit.
+> Software archived on Zenodo: [10.5281/zenodo.20384917](https://doi.org/10.5281/zenodo.20384917) (v0.1.0, May 2026).
 
 A [`CITATION.cff`](CITATION.cff) file is provided for GitHub's native "Cite this repository" feature.
 
@@ -174,5 +175,5 @@ Contributions touching BQSGO, CBC, or OP-2/OP-3 calibration-sequence algorithms 
 - ORCID: [0009-0009-6267-7897](https://orcid.org/0009-0009-6267-7897)
 - Email: [chinyu@costryx.net](mailto:chinyu@costryx.net)
 - Location: New Taipei City, Taiwan
-
+- docs: add software DOI 10.5281/zenodo.20384917 to README
 Maintained by Costryx — establishing fixture-invariant metrology for the sub-THz era.
