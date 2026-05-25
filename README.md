@@ -2,7 +2,7 @@
 
 [![Python tests](https://github.com/costryx/costryx-leq-extractor/actions/workflows/python-tests.yml/badge.svg?branch=main)](https://github.com/costryx/costryx-leq-extractor/actions/workflows/python-tests.yml)
 [![Paper DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20382496.svg)](https://doi.org/10.5281/zenodo.20382496)
-[![Software DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20384917.svg)](https://doi.org/10.5281/zenodo.20384917)
+[![Software DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20384916.svg)](https://doi.org/10.5281/zenodo.20384916)
 [![License](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-foundational--reference-orange.svg)]()
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)]()
