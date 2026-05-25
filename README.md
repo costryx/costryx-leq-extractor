@@ -1,4 +1,5 @@
 # costryx-leq-extractor
+[![Python tests](https://github.com/costryx/costryx-leq-extractor/actions/workflows/python-tests.yml/badge.svg?branch=main)](https://github.com/costryx/costryx-leq-extractor/actions/workflows/python-tests.yml)
 
 [![DOI](https://img.shields.io/badge/DOI-pending-blue.svg)](https://doi.org/10.36227/techrxiv.PENDING)
 [![License](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
