@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "costryx-leq-extractor"
+version = "0.1.0"
+description = "Official reference implementation of the L_eq extraction framework for sub-THz interconnect channel validation."
+readme = "README.md"
+license = {text = "Apache-2.0"}
+authors = [{name = "Chin-Yu Hsu", email = "chinyu@costryx.net"}]
+keywords = ["signal-integrity", "sub-THz", "PAM4", "metrology", "VNA", "S-parameters", "PCIe-8.0", "SerDes"]
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24", "matplotlib>=3.7"]
+
+[project.optional-dependencies]
+touchstone = ["scikit-rf>=0.30"]
+
+[project.urls]
+Homepage = "https://github.com/costryx/costryx-leq-extractor"
+Paper = "https://doi.org/10.36227/techrxiv.PENDING"
+Issues = "https://github.com/costryx/costryx-leq-extractor/issues"
