@@ -2,10 +2,21 @@
 requires = ["setuptools>=64", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[project]
+[project]   
 name = "costryx-leq-extractor"
 version = "0.1.0"
 description = "Official reference implementation of the L_eq extraction framework for sub-THz interconnect channel validation."
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics",
+]
 readme = "README.md"
 license = {text = "Apache-2.0"}
 authors = [{name = "Chin-Yu Hsu", email = "chinyu@costryx.net"}]
@@ -18,5 +29,11 @@ touchstone = ["scikit-rf>=0.30"]
 
 [project.urls]
 Homepage = "https://github.com/costryx/costryx-leq-extractor"
-Paper = "https://doi.org/10.36227/techrxiv.PENDING"
+Paper = "https://doi.org/10.5281/zenodo.20382496"
+PaperConceptDOI = "https://doi.org/10.5281/zenodo.20382495"
+Documentation = "https://github.com/costryx/costryx-leq-extractor/blob/main/README.md"
 Issues = "https://github.com/costryx/costryx-leq-extractor/issues"
+Repository = "https://github.com/costryx/costryx-leq-extractor"
+
+[tool.setuptools.packages.find]
+where = ["src"]
