@@ -50,4 +50,3 @@ plot_leq_spectrum_standard(
     title="DUT Continuous L_eq(f) Spectrum",
 )
 ```
-
