@@ -162,12 +162,29 @@ A [CITATION.cff](CITATION.cff) file is provided for GitHub's native "Cite this r
 
 This software is released under the **Apache License 2.0**. See [LICENSE](LICENSE).
 
-The patent grant clause protects downstream users from reverse-patent claims on the foundational extractor disclosed herein.
+The Apache-2.0 §3 patent grant clause protects downstream users from reverse-patent claims on the foundational extractor disclosed herein. This grant covers **only the contributions made by the licensor in the released code** and does **not** waive the broader Costryx patent portfolio (USPTO Provisional × 6, TIPO × 6+, PCT × 2, 153 countries) outside the scope of the released code.
 
-> **Note on tiered licensing**: While this software (Layer 2) is Apache-2.0,
-> the OpenAPI specification (Layer 3) is released under a Proprietary license
-> and the companion papers (Layer 1) under CC-BY-4.0. See the Three-Layer IP
-> Architecture table above for full details.
+### Three-Layer Licensing at a Glance
+
+| Layer | Asset | License | Commercial Use? |
+|-------|-------|---------|-----------------|
+| 1️⃣ Paper | V4.0.1 / V2.4.1 Working Reports | CC-BY-4.0 | ✅ With attribution |
+| 2️⃣ Software | costryx-leq-extractor v0.1.0 | Apache-2.0 | ✅ With Apache-2.0 compliance |
+| 3️⃣ API Spec | OpenAPI 3.1 v1.2.0 | Proprietary (Costryx) | ⚠️ Requires written license |
+
+> **Public visibility ≠ free commercial use.** Reading and evaluation are free across all three layers; commercial deployment of Layer 3 requires a written license from Costryx.
+
+### 📜 Full Licensing Documentation
+
+For the **authoritative source** on all licensing questions — including detailed Layer 1/2/3 terms, Apache-2.0 §3 patent grant scope, patent termination clause, Costryx patent portfolio cross-reference, license compatibility matrix (MIT / GPL-3.0 / GPL-2.0 / proprietary), and 8 frequently asked questions (Q1: commercial use; Q2: API implementation; Q4: patent grant scope; Q6: version citation; Q8: V2.4.1 metadata-only revision) — please see:
+
+➡️ **[docs/LICENSING.md](docs/LICENSING.md)**
+
+### Commercial Inquiries
+
+For Layer 3 API licensing, FRAND terms for standards-essential implementations, or any commercial use that may touch the broader Costryx patent portfolio, please contact:
+
+📩 **chinyu@costryx.net** (standard turnaround: 5-7 business days)
 
 ---
 
