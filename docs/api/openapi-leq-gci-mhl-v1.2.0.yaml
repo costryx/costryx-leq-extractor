@@ -1,0 +1,1546 @@
+openapi: 3.1.0
+info:
+  title: Leq / GCI / MHL Enterprise API
+  version: 1.2.0
+  summary: Swagger Editor ready enterprise API for sub-THz interconnect metrology workflows.
+  description: |
+    Multi-tenant enterprise API for projects, DUTs, files, measurements,
+    Leq/GCI analysis, MHL packaging, SHA-256 verification, and audit trails.
+
+    This public contract intentionally excludes proprietary calibration matrices,
+    DUT routing coordinates, stack-up details, and vendor-specific confidential settings.
+
+    Companion artifacts:
+    - V4.0 working report:    https://doi.org/10.5281/zenodo.20382496
+    - V2.4 foundation:        https://doi.org/10.5281/zenodo.20341571
+    - Reference impl v0.1.0:  https://doi.org/10.5281/zenodo.20384916
+    - GitHub:                 https://github.com/costryx/costryx-leq-extractor
+  termsOfService: https://costryx.net/terms
+  contact:
+    name: API Support
+    email: api-support@costryx.net
+    url: https://costryx.net/support
+  license:
+    name: Proprietary
+    url: https://costryx.net/license
+  x-author:
+    name: Chin-Yu Hsu
+    orcid: https://orcid.org/0009-0009-6267-7897
+    affiliation: Independent Researcher
+
+servers:
+  - url: https://api.example.com/v1
+    description: Production (multi-tenant, full read/write)
+  - url: https://sandbox.api.example.com/v1
+    description: Sandbox (testing, ephemeral data)
+  - url: https://audit-readonly.api.example.com/v1
+    description: |
+      Audit read-only endpoint. Restricted to audit.read scope only.
+      Intended for third-party auditors with audit-only credentials,
+      isolated from production write paths.
+  - url: https://{tenantSubdomain}.api.example.com/v1
+    description: Tenant-isolated endpoint (per data residency requirements)
+    variables:
+      tenantSubdomain:
+        default: tenant-default
+        description: Tenant-specific subdomain for data sovereignty isolation
+
+
+security:
+  - oauth2ClientCredentials: [measurements.read, measurements.write, analysis.run, audit.read]
+  - bearerAuth: []
+
+tags:
+  - name: Admin
+  - name: Tenants
+  - name: Sites
+  - name: Projects
+  - name: DUTs
+  - name: Files
+  - name: Measurements
+  - name: Analysis
+  - name: Jobs
+  - name: MHL
+  - name: Audit
+
+paths:
+  /health:
+    get:
+      tags: [Admin]
+      summary: Health check
+      operationId: getHealth
+      security: []
+      responses:
+        '200':
+          description: Service health
+          headers:
+            X-Request-Id:        { $ref: '#/components/headers/XRequestId' }
+            X-RateLimit-Limit:   { $ref: '#/components/headers/XRateLimitLimit' }
+            X-RateLimit-Remaining: { $ref: '#/components/headers/XRateLimitRemaining' }
+            X-RateLimit-Reset:   { $ref: '#/components/headers/XRateLimitReset' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/HealthResponse' }
+
+  /tenants:
+    get:
+      tags: [Tenants]
+      summary: List tenants
+      operationId: listTenants
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/XRequestIdHeader'
+      responses:
+        '200':
+          description: Tenant list
+          headers:
+            X-Request-Id:          { $ref: '#/components/headers/XRequestId' }
+            X-RateLimit-Limit:     { $ref: '#/components/headers/XRateLimitLimit' }
+            X-RateLimit-Remaining: { $ref: '#/components/headers/XRateLimitRemaining' }
+            X-RateLimit-Reset:     { $ref: '#/components/headers/XRateLimitReset' }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TenantListResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+    post:
+      tags: [Tenants]
+      summary: Create tenant
+      operationId: createTenant
+      parameters:
+        - $ref: '#/components/parameters/XRequestIdHeader'
+        - $ref: '#/components/parameters/IdempotencyKeyHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TenantCreateRequest' }
+            examples:
+              default:
+                summary: Multi-region semiconductor group
+                description: Standard enterprise tenant with 7-year retention (ISO 17025 compliant).
+                value:
+                  name: Example Semiconductor Group
+                  dataRegion: ap-northeast-1
+                  retentionDays: 2555
+      responses:
+        '201':
+          description: Tenant created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Tenant' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+
+  /tenants/{tenantId}:
+    parameters:
+      - $ref: '#/components/parameters/TenantId'
+      - $ref: '#/components/parameters/XRequestIdHeader'
+    get:
+      tags: [Tenants]
+      summary: Get tenant
+      operationId: getTenant
+      responses:
+        '200':
+          description: Tenant details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Tenant' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      tags: [Tenants]
+      summary: Update tenant
+      operationId: updateTenant
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKeyHeader'
+      requestBody:
+        required: true
+        content:
+          application/merge-patch+json:
+            schema: { $ref: '#/components/schemas/TenantPatchRequest' }
+      responses:
+        '200':
+          description: Tenant updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Tenant' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /sites:
+    get:
+      tags: [Sites]
+      summary: List sites
+      operationId: listSites
+      parameters:
+        - $ref: '#/components/parameters/TenantIdQuery'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Site list
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SiteListResponse' }
+    post:
+      tags: [Sites]
+      summary: Create site
+      operationId: createSite
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKeyHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SiteCreateRequest' }
+      responses:
+        '201':
+          description: Site created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Site' }
+
+  /sites/{siteId}:
+    parameters:
+      - $ref: '#/components/parameters/SiteId'
+    get:
+      tags: [Sites]
+      summary: Get site
+      operationId: getSite
+      responses:
+        '200':
+          description: Site details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Site' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      tags: [Sites]
+      summary: Update site
+      operationId: updateSite
+      requestBody:
+        required: true
+        content:
+          application/merge-patch+json:
+            schema: { $ref: '#/components/schemas/SitePatchRequest' }
+      responses:
+        '200':
+          description: Site updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Site' }
+
+  /projects:
+    get:
+      tags: [Projects]
+      summary: List projects
+      operationId: listProjects
+      parameters:
+        - $ref: '#/components/parameters/TenantIdQuery'
+        - $ref: '#/components/parameters/SiteIdQuery'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Project list
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ProjectListResponse' }
+    post:
+      tags: [Projects]
+      summary: Create project
+      operationId: createProject
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKeyHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ProjectCreateRequest' }
+            examples:
+              default:
+                summary: 256G PCIe 8.0 validation program
+                value:
+                  tenantId: tenant_001
+                  siteId: site_001
+                  name: 256G Validation Program
+                  classification: restricted
+                  tags: [sub-thz, pcie8, audit-ready]
+      responses:
+        '201':
+          description: Project created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Project' }
+
+  /projects/{projectId}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      tags: [Projects]
+      summary: Get project
+      operationId: getProject
+      responses:
+        '200':
+          description: Project details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Project' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      tags: [Projects]
+      summary: Update project
+      operationId: updateProject
+      requestBody:
+        required: true
+        content:
+          application/merge-patch+json:
+            schema: { $ref: '#/components/schemas/ProjectPatchRequest' }
+      responses:
+        '200':
+          description: Project updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Project' }
+
+  /duts:
+    get:
+      tags: [DUTs]
+      summary: List DUTs
+      operationId: listDuts
+      parameters:
+        - $ref: '#/components/parameters/ProjectIdQuery'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: DUT list
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/DutListResponse' }
+    post:
+      tags: [DUTs]
+      summary: Create DUT
+      operationId: createDut
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKeyHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DutCreateRequest' }
+      responses:
+        '201':
+          description: DUT created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Dut' }
+
+  /duts/{dutId}:
+    parameters:
+      - $ref: '#/components/parameters/DutId'
+    get:
+      tags: [DUTs]
+      summary: Get DUT
+      operationId: getDut
+      responses:
+        '200':
+          description: DUT details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Dut' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      tags: [DUTs]
+      summary: Update DUT
+      operationId: updateDut
+      requestBody:
+        required: true
+        content:
+          application/merge-patch+json:
+            schema: { $ref: '#/components/schemas/DutPatchRequest' }
+      responses:
+        '200':
+          description: DUT updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Dut' }
+
+  /files/upload-url:
+    post:
+      tags: [Files]
+      summary: Create upload URL
+      operationId: createUploadUrl
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKeyHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/FileUploadUrlRequest' }
+      responses:
+        '200':
+          description: Pre-signed upload URL
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/FileUploadUrlResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+
+  /files:
+    get:
+      tags: [Files]
+      summary: List files
+      operationId: listFiles
+      parameters:
+        - $ref: '#/components/parameters/ProjectIdQuery'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: File list
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/FileArtifactListResponse' }
+
+  /files/{fileId}:
+    parameters:
+      - $ref: '#/components/parameters/FileId'
+    get:
+      tags: [Files]
+      summary: Get file metadata
+      operationId: getFile
+      responses:
+        '200':
+          description: File metadata
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/FileArtifact' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /measurements:
+    get:
+      tags: [Measurements]
+      summary: List measurements
+      operationId: listMeasurements
+      parameters:
+        - $ref: '#/components/parameters/ProjectIdQuery'
+        - $ref: '#/components/parameters/DutIdQuery'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Measurement list
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MeasurementListResponse' }
+    post:
+      tags: [Measurements]
+      summary: Create measurement record
+      operationId: createMeasurement
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKeyHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/MeasurementCreateRequest' }
+            examples:
+              default:
+                summary: Sub-THz VNA sweep with 4-step calibration
+                description: Standard 110-220 GHz channel characterization per V4.0 §4-step transfer protocol.
+                value:
+                  projectId: proj_001
+                  dutId: dut_001
+                  siteId: site_001
+                  measurementType: vna_sparameter
+                  instrumentClass: broadband-170-220GHz
+                  passiveAuditState: true
+                  frequencyStartHz: 110000000000
+                  frequencyStopHz: 220000000000
+                  sweepPoints: 2201
+                  ifBandwidthHz: 1000
+                  averagingCount: 8
+                  temperatureC: 25
+                  repeatIndex: 1
+                  fileIds: [file_touchstone_raw_001, file_cal_record_001]
+                  calibrationHistory:
+                    t1: { stepCode: T1, method: TRL, declared: true }
+                    t2: { stepCode: T2, method: SOLT, declared: true }
+                    t3: { stepCode: T3, method: AFR_2X_THRU, declared: true }
+                    t4: { stepCode: T4, method: TDR, declared: true }
+              cei448g:
+                summary: OIF CEI-448G framework anchors (forward-compatible)
+                value:
+                  projectId: proj_001
+                  dutId: dut_002
+                  siteId: site_001
+                  measurementType: vna_sparameter
+                  instrumentClass: broadband-220-330GHz
+                  passiveAuditState: true
+                  frequencyStartHz: 220000000000
+                  frequencyStopHz: 330000000000
+                  sweepPoints: 2201
+                  fileIds: [file_touchstone_raw_002]
+                  calibrationHistory:
+                    t1: { stepCode: T1, method: MULTILINE_TRL, declared: true }
+                    t2: { stepCode: T2, method: SOLT, declared: true }
+                    t3: { stepCode: T3, method: AFR, declared: true }
+                    t4: { stepCode: T4, method: TDR, declared: true }
+      responses:
+        '201':
+          description: Measurement created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Measurement' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+
+  /measurements/{measurementId}:
+    parameters:
+      - $ref: '#/components/parameters/MeasurementId'
+    get:
+      tags: [Measurements]
+      summary: Get measurement
+      operationId: getMeasurement
+      responses:
+        '200':
+          description: Measurement details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Measurement' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      tags: [Measurements]
+      summary: Update measurement
+      operationId: updateMeasurement
+      requestBody:
+        required: true
+        content:
+          application/merge-patch+json:
+            schema: { $ref: '#/components/schemas/MeasurementPatchRequest' }
+      responses:
+        '200':
+          description: Measurement updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Measurement' }
+
+  /analysis/leq-gci:
+    post:
+      tags: [Analysis]
+      summary: Run Leq and GCI analysis
+      operationId: runLeqGciAnalysis
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKeyHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LeqGciAnalysisRequest' }
+            examples:
+              default:
+                summary: PCIe 8.0 standard three-anchor analysis
+                description: Default plan per V4.0 §three-anchor decision rule for 256 GT/s PAM4.
+                value:
+                  projectId: proj_001
+                  dutId: dut_001
+                  measurementIds: [meas_001, meas_002, meas_003]
+                  anchorPlan:
+                    op1GHz: 64
+                    op2GHz: 96
+                    op3GHz: 128
+                    em5ThresholdsMm: { op1: 0.50, op2: 0.35, op3: 0.25 }
+                  uncertaintyModel:
+                    includeU1: true
+                    includeU2: true
+                    includeU3: true
+                    includeU4: true
+                    includeU5: true
+                    confidenceLevel: 0.95
+      responses:
+        '202':
+          description: Analysis job accepted
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/JobAcceptedResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+
+  /analysis/mhl-packages:
+    post:
+      tags: [MHL]
+      summary: Build MHL package
+      operationId: buildMhlPackage
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKeyHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/MhlPackageBuildRequest' }
+      responses:
+        '202':
+          description: MHL package job accepted
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/JobAcceptedResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+
+  /analysis/hash-verification:
+    post:
+      tags: [MHL]
+      summary: Verify MHL SHA-256 hash chain
+      operationId: verifyMhlHash
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/HashVerificationRequest' }
+      responses:
+        '200':
+          description: Verification result
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/HashVerificationResult' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/UnprocessableEntity' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+
+  /jobs:
+    get:
+      tags: [Jobs]
+      summary: List jobs
+      operationId: listJobs
+      parameters:
+        - $ref: '#/components/parameters/ProjectIdQuery'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Job list
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/JobListResponse' }
+
+  /jobs/{jobId}:
+    parameters:
+      - $ref: '#/components/parameters/JobId'
+    get:
+      tags: [Jobs]
+      summary: Get async job status
+      operationId: getJob
+      responses:
+        '200':
+          description: Job status
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Job' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [Jobs]
+      summary: Cancel async job
+      operationId: cancelJob
+      responses:
+        '204':
+          description: Job cancellation accepted (no content)
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409':
+          description: Job already in terminal state (succeeded/failed/canceled)
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ErrorResponse' }
+
+  /mhl-packages:
+    get:
+      tags: [MHL]
+      summary: List MHL packages
+      operationId: listMhlPackages
+      parameters:
+        - $ref: '#/components/parameters/ProjectIdQuery'
+        - $ref: '#/components/parameters/DutIdQuery'
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: MHL package list
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MhlPackageListResponse' }
+
+  /mhl-packages/{mhlPackageId}:
+    parameters:
+      - $ref: '#/components/parameters/MhlPackageId'
+    get:
+      tags: [MHL]
+      summary: Get MHL package
+      operationId: getMhlPackage
+      responses:
+        '200':
+          description: MHL package details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MhlPackage' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /audit/events:
+    get:
+      tags: [Audit]
+      summary: List audit events
+      operationId: listAuditEvents
+      parameters:
+        - $ref: '#/components/parameters/TenantIdQuery'
+        - name: objectType
+          in: query
+          schema: { type: string }
+        - name: objectId
+          in: query
+          schema: { type: string }
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Audit event list
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AuditEventListResponse' }
+
+webhooks:
+  analysisCompleted:
+    post:
+      summary: Notify when analysis job completes
+      operationId: onAnalysisCompleted
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/WebhookAnalysisCompletedPayload' }
+      responses:
+        '200':
+          description: Webhook acknowledged
+        '410':
+          description: Webhook endpoint retired; sender should stop delivery
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    oauth2ClientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.example.com/oauth2/token
+          scopes:
+            measurements.read: Read measurement records
+            measurements.write: Create and update measurement records
+            analysis.run: Run analysis jobs
+            audit.read: Read audit logs
+    oidc:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.example.com/.well-known/openid-configuration
+    mutualTLS:
+      type: mutualTLS
+
+  parameters:
+    TenantId:        { name: tenantId,   in: path,  required: true, schema: { $ref: '#/components/schemas/Id' } }
+    SiteId:          { name: siteId,     in: path,  required: true, schema: { $ref: '#/components/schemas/Id' } }
+    ProjectId:       { name: projectId,  in: path,  required: true, schema: { $ref: '#/components/schemas/Id' } }
+    DutId:           { name: dutId,      in: path,  required: true, schema: { $ref: '#/components/schemas/Id' } }
+    FileId:          { name: fileId,     in: path,  required: true, schema: { $ref: '#/components/schemas/Id' } }
+    MeasurementId:   { name: measurementId, in: path, required: true, schema: { $ref: '#/components/schemas/Id' } }
+    JobId:           { name: jobId,      in: path,  required: true, schema: { $ref: '#/components/schemas/Id' } }
+    MhlPackageId:    { name: mhlPackageId, in: path, required: true, schema: { $ref: '#/components/schemas/Id' } }
+    TenantIdQuery:   { name: tenantId,   in: query, schema: { $ref: '#/components/schemas/Id' } }
+    SiteIdQuery:     { name: siteId,     in: query, schema: { $ref: '#/components/schemas/Id' } }
+    ProjectIdQuery:  { name: projectId,  in: query, schema: { $ref: '#/components/schemas/Id' } }
+    DutIdQuery:      { name: dutId,      in: query, schema: { $ref: '#/components/schemas/Id' } }
+    Cursor:          { name: cursor,     in: query, schema: { type: string } }
+    Limit:           { name: limit,      in: query, schema: { type: integer, minimum: 1, maximum: 200, default: 50 } }
+    XRequestIdHeader:
+      name: X-Request-Id
+      in: header
+      required: false
+      schema: { type: string }
+    IdempotencyKeyHeader:
+      name: Idempotency-Key
+      in: header
+      required: false
+      schema: { type: string, minLength: 8, maxLength: 255 }
+
+  headers:
+    XRequestId:
+      description: Request correlation ID
+      schema: { type: string }
+    XRateLimitLimit:
+      description: Maximum requests permitted in current window
+      schema: { type: integer }
+    XRateLimitRemaining:
+      description: Requests remaining in current window
+      schema: { type: integer }
+    XRateLimitReset:
+      description: Unix timestamp when rate limit window resets
+      schema: { type: integer, format: int64 }
+    RetryAfter:
+      description: Seconds to wait before retry (used in 429/503)
+      schema: { type: integer }
+
+  responses:
+    BadRequest:
+      description: Malformed request syntax
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+    Unauthorized:
+      description: Missing or invalid credentials
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+    Forbidden:
+      description: Insufficient privileges
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+    Conflict:
+      description: Resource state conflict
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+    UnprocessableEntity:
+      description: Semantic validation failure (e.g., measurementIds reference DUTs from different projects)
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+    TooManyRequests:
+      description: Rate limit exceeded
+      headers:
+        Retry-After:         { $ref: '#/components/headers/RetryAfter' }
+        X-RateLimit-Limit:   { $ref: '#/components/headers/XRateLimitLimit' }
+        X-RateLimit-Remaining: { $ref: '#/components/headers/XRateLimitRemaining' }
+        X-RateLimit-Reset:   { $ref: '#/components/headers/XRateLimitReset' }
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+
+  schemas:
+    Id:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '^[A-Za-z0-9_:.\-]+$'
+      description: |
+        Resource identifier. Allowed: A-Z, a-z, 0-9, underscore, colon,
+        period, hyphen. Hyphen placed at the end of the character class
+        to avoid escape ambiguity.
+
+    Sha256Hex:
+      type: string
+      pattern: '^[a-f0-9]{64}$'
+      description: |
+        SHA-256 hash in lowercase hexadecimal, per NIST FIPS PUB 180-4
+        canonical representation. Length: exactly 64 hex characters.
+      example: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+
+    ErrorResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        code:    { type: string }
+        message: { type: string }
+        requestId: { type: string }
+        details:
+          type: array
+          items: { type: object }
+      required: [code, message]
+
+    HealthResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        status: { type: string, const: ok }
+        time:   { type: string, format: date-time }
+      required: [status, time]
+
+    ResourceMetadata:
+      type: object
+      additionalProperties: false
+      properties:
+        id:        { $ref: '#/components/schemas/Id' }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+      required: [id, createdAt, updatedAt]
+
+    Tenant:
+      allOf:
+        - $ref: '#/components/schemas/ResourceMetadata'
+        - type: object
+          additionalProperties: false
+          properties:
+            name:          { type: string, minLength: 1, maxLength: 200 }
+            status:        { type: string, enum: [active, suspended] }
+            dataRegion:    { type: string }
+            retentionDays: { type: integer, minimum: 1 }
+          required: [name, status, dataRegion, retentionDays]
+
+    TenantCreateRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        name:          { type: string }
+        dataRegion:    { type: string }
+        retentionDays: { type: integer, minimum: 1 }
+      required: [name, dataRegion, retentionDays]
+
+    TenantPatchRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        name:          { type: string }
+        status:        { type: string, enum: [active, suspended] }
+        retentionDays: { type: integer, minimum: 1 }
+
+    TenantListResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        items: { type: array, items: { $ref: '#/components/schemas/Tenant' } }
+        nextCursor:
+          type: [string, 'null']
+      required: [items]
+
+    Site:
+      allOf:
+        - $ref: '#/components/schemas/ResourceMetadata'
+        - type: object
+          additionalProperties: false
+          properties:
+            tenantId: { $ref: '#/components/schemas/Id' }
+            name:     { type: string }
+            code:     { type: string }
+            timezone: { type: string }
+          required: [tenantId, name, code, timezone]
+
+    SiteCreateRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        tenantId: { $ref: '#/components/schemas/Id' }
+        name:     { type: string }
+        code:     { type: string }
+        timezone: { type: string }
+      required: [tenantId, name, code, timezone]
+
+    SitePatchRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        name:     { type: string }
+        code:     { type: string }
+        timezone: { type: string }
+
+    SiteListResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        items: { type: array, items: { $ref: '#/components/schemas/Site' } }
+        nextCursor: { type: [string, 'null'] }
+      required: [items]
+
+    Project:
+      allOf:
+        - $ref: '#/components/schemas/ResourceMetadata'
+        - type: object
+          additionalProperties: false
+          properties:
+            tenantId:       { $ref: '#/components/schemas/Id' }
+            siteId:         { $ref: '#/components/schemas/Id' }
+            name:           { type: string }
+            status:         { type: string, enum: [draft, active, archived] }
+            classification: { type: string, enum: [internal, confidential, restricted] }
+            tags:           { type: array, items: { type: string } }
+          required: [tenantId, siteId, name, status, classification, tags]
+
+    ProjectCreateRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        tenantId:       { $ref: '#/components/schemas/Id' }
+        siteId:         { $ref: '#/components/schemas/Id' }
+        name:           { type: string }
+        classification: { type: string, enum: [internal, confidential, restricted] }
+        tags:           { type: array, items: { type: string } }
+      required: [tenantId, siteId, name, classification]
+
+    ProjectPatchRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        name:           { type: string }
+        status:         { type: string, enum: [draft, active, archived] }
+        classification: { type: string, enum: [internal, confidential, restricted] }
+        tags:           { type: array, items: { type: string } }
+
+    ProjectListResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        items: { type: array, items: { $ref: '#/components/schemas/Project' } }
+        nextCursor: { type: [string, 'null'] }
+      required: [items]
+
+    Dut:
+      allOf:
+        - $ref: '#/components/schemas/ResourceMetadata'
+        - type: object
+          additionalProperties: false
+          properties:
+            projectId:      { $ref: '#/components/schemas/Id' }
+            name:           { type: string }
+            dutClass:       { type: string, enum: [pcb_channel, package_channel, board_package_assembly, coupon] }
+            materialFamily: { type: string }
+            notes:          { type: string }
+          required: [projectId, name, dutClass]
+
+    DutCreateRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        projectId:      { $ref: '#/components/schemas/Id' }
+        name:           { type: string }
+        dutClass:       { type: string, enum: [pcb_channel, package_channel, board_package_assembly, coupon] }
+        materialFamily: { type: string }
+        notes:          { type: string }
+      required: [projectId, name, dutClass]
+
+    DutPatchRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        name:           { type: string }
+        materialFamily: { type: string }
+        notes:          { type: string }
+
+    DutListResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        items: { type: array, items: { $ref: '#/components/schemas/Dut' } }
+        nextCursor: { type: [string, 'null'] }
+      required: [items]
+
+    FileUploadUrlRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        projectId: { $ref: '#/components/schemas/Id' }
+        filename:  { type: string }
+        mediaType: { type: string }
+        sizeBytes: { type: integer, minimum: 1 }
+        sha256:    { $ref: '#/components/schemas/Sha256Hex' }
+      required: [projectId, filename, mediaType, sizeBytes, sha256]
+
+    FileUploadUrlResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        fileId:    { $ref: '#/components/schemas/Id' }
+        uploadUrl: { type: string, format: uri }
+        expiresAt: { type: string, format: date-time }
+      required: [fileId, uploadUrl, expiresAt]
+
+    FileArtifact:
+      allOf:
+        - $ref: '#/components/schemas/ResourceMetadata'
+        - type: object
+          additionalProperties: false
+          properties:
+            projectId: { $ref: '#/components/schemas/Id' }
+            filename:  { type: string }
+            mediaType: { type: string }
+            sizeBytes: { type: integer }
+            sha256:    { $ref: '#/components/schemas/Sha256Hex' }
+            role:
+              type: string
+              enum: [touchstone_raw, touchstone_derived, tdr_data, calibration_record, report, manifest, attachment]
+          required: [projectId, filename, mediaType, sizeBytes, sha256, role]
+
+    FileArtifactListResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        items: { type: array, items: { $ref: '#/components/schemas/FileArtifact' } }
+        nextCursor: { type: [string, 'null'] }
+      required: [items]
+
+    CalibrationHistory:
+      type: object
+      additionalProperties: false
+      properties:
+        t1: { $ref: '#/components/schemas/CalibrationStep' }
+        t2: { $ref: '#/components/schemas/CalibrationStep' }
+        t3: { $ref: '#/components/schemas/CalibrationStep' }
+        t4: { $ref: '#/components/schemas/CalibrationStep' }
+      required: [t1, t2, t3, t4]
+
+    CalibrationStep:
+      type: object
+      additionalProperties: false
+      properties:
+        stepCode: { type: string, enum: [T1, T2, T3, T4] }
+        method:
+          type: string
+          enum:
+            - TRL
+            - MULTILINE_TRL
+            - SOLT
+            - LRM
+            - LRRM
+            - LRL
+            - AFR
+            - AFR_2X_THRU
+            - TDR
+          description: |
+            Calibration method per industry standards. AFR_2X_THRU is the
+            recommended primary pathway per V4.0 §4.2 for production-line
+            environments where only 2x-Thru fixture coupons are available.
+            MULTILINE_TRL aligns with NIST multiline TRL.
+        declared:    { type: boolean }
+        performedAt: { type: string, format: date-time }
+        operatorId:  { type: string }
+        note:        { type: string }
+      required: [stepCode, method, declared]
+
+    Measurement:
+      allOf:
+        - $ref: '#/components/schemas/ResourceMetadata'
+        - type: object
+          additionalProperties: false
+          properties:
+            projectId: { $ref: '#/components/schemas/Id' }
+            dutId:     { $ref: '#/components/schemas/Id' }
+            siteId:    { $ref: '#/components/schemas/Id' }
+            measurementType:
+              type: string
+              enum:
+                - vna_sparameter
+                - tdr
+                - thermal_state_capture
+                - repeatability_run
+                - phase_repeatability
+                - causality_check
+                - passivity_check
+            status:
+              type: string
+              enum: [draft, recording, sealed, voided]
+              description: |
+                Lifecycle state:
+                - draft: created, awaiting raw file upload
+                - recording: VNA/TDR sweep in progress
+                - sealed: measurement complete, hash chain locked, immutable
+                - voided: invalidated post-hoc; preserved for audit but excluded from analysis
+            sealedAt:
+              type: string
+              format: date-time
+              description: Timestamp when status transitioned to sealed
+            instrumentClass:
+              type: string
+              enum:
+                - broadband-110-170GHz
+                - broadband-170-220GHz
+                - broadband-220-330GHz
+                - mmwave-50-110GHz
+                - tdr-50ps-rise
+                - tdr-20ps-rise
+                - tdr-9ps-rise
+              description: |
+                Instrument class identifier (vendor-neutral). Vendor-specific
+                model numbers are NOT collected per V4.0 §VIII.3 disclosure boundary.
+            passiveAuditState:  { type: boolean }
+            frequencyStartHz:   { type: number }
+            frequencyStopHz:    { type: number }
+            sweepPoints:        { type: integer }
+            ifBandwidthHz:      { type: number }
+            averagingCount:     { type: integer }
+            temperatureC:       { type: number }
+            repeatIndex:        { type: integer, minimum: 1 }
+            fileIds:
+              type: array
+              items: { $ref: '#/components/schemas/Id' }
+            calibrationHistory: { $ref: '#/components/schemas/CalibrationHistory' }
+          required:
+            [projectId, dutId, siteId, measurementType, status, passiveAuditState, fileIds, calibrationHistory]
+
+    MeasurementCreateRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        projectId: { $ref: '#/components/schemas/Id' }
+        dutId:     { $ref: '#/components/schemas/Id' }
+        siteId:    { $ref: '#/components/schemas/Id' }
+        measurementType:
+          type: string
+          enum: [vna_sparameter, tdr, thermal_state_capture, repeatability_run, phase_repeatability, causality_check, passivity_check]
+        instrumentClass:
+          type: string
+          enum:
+            - broadband-110-170GHz
+            - broadband-170-220GHz
+            - broadband-220-330GHz
+            - mmwave-50-110GHz
+            - tdr-50ps-rise
+            - tdr-20ps-rise
+            - tdr-9ps-rise
+        passiveAuditState: { type: boolean }
+        frequencyStartHz:  { type: number }
+        frequencyStopHz:   { type: number }
+        sweepPoints:       { type: integer }
+        ifBandwidthHz:     { type: number }
+        averagingCount:    { type: integer }
+        temperatureC:      { type: number }
+        repeatIndex:       { type: integer, minimum: 1 }
+        fileIds:
+          type: array
+          minItems: 1
+          items: { $ref: '#/components/schemas/Id' }
+        calibrationHistory: { $ref: '#/components/schemas/CalibrationHistory' }
+      required:
+        [projectId, dutId, siteId, measurementType, passiveAuditState, fileIds, calibrationHistory]
+
+    MeasurementPatchRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        instrumentClass:
+          type: string
+          enum:
+            - broadband-110-170GHz
+            - broadband-170-220GHz
+            - broadband-220-330GHz
+            - mmwave-50-110GHz
+            - tdr-50ps-rise
+            - tdr-20ps-rise
+            - tdr-9ps-rise
+        status:           { type: string, enum: [draft, recording, sealed, voided] }
+        passiveAuditState: { type: boolean }
+        frequencyStartHz: { type: number }
+        frequencyStopHz:  { type: number }
+        sweepPoints:      { type: integer }
+        ifBandwidthHz:    { type: number }
+        averagingCount:   { type: integer }
+        temperatureC:     { type: number }
+        repeatIndex:      { type: integer, minimum: 1 }
+        fileIds:
+          type: array
+          items: { $ref: '#/components/schemas/Id' }
+        calibrationHistory: { $ref: '#/components/schemas/CalibrationHistory' }
+
+    MeasurementListResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        items: { type: array, items: { $ref: '#/components/schemas/Measurement' } }
+        nextCursor: { type: [string, 'null'] }
+      required: [items]
+
+    AnchorPlan:
+      type: object
+      additionalProperties: false
+      description: |
+        Three-anchor decision plan per V4.0 §three-anchor decision rule.
+        Default values correspond to PCIe 8.0 (256 GT/s PAM4) Nyquist (64 GHz)
+        and its harmonic neighborhoods (96, 128 GHz).
+      properties:
+        op1GHz:
+          type: number
+          default: 64
+          description: Operating point 1 — Nyquist for PCIe 8.0 256 GT/s PAM4
+        op2GHz:
+          type: number
+          default: 96
+          description: Operating point 2 — 1.5x Nyquist harmonic neighborhood
+        op3GHz:
+          type: number
+          default: 128
+          description: Operating point 3 — 2x Nyquist harmonic neighborhood
+        em5ThresholdsMm:
+          type: object
+          additionalProperties: false
+          description: |
+            Equivalent spatial length boundaries L_eq,bnd (mm), instantiated
+            per V4.0 §6.3 convergence boundary L_eq ≤ λEM/4.
+          properties:
+            op1: { type: number, default: 0.50, description: 'L_eq ≤ 0.50 mm at 64 GHz (λEM/4)' }
+            op2: { type: number, default: 0.35, description: 'L_eq ≤ 0.35 mm at 96 GHz' }
+            op3: { type: number, default: 0.25, description: 'L_eq ≤ 0.25 mm at 128 GHz (λEM/4)' }
+          required: [op1, op2, op3]
+      required: [op1GHz, op2GHz, op3GHz, em5ThresholdsMm]
+
+    UncertaintyModel:
+      type: object
+      additionalProperties: false
+      description: |
+        Closed-form σ_Leq uncertainty propagation model per V4.0 §σ_Leq five
+        error sources, classified per JCGM 100:2008 (GUM) Type A/B,
+        traceable to ISO/IEC 17025 measurement-evidence layer.
+      properties:
+        includeU1: { type: boolean, default: true, description: 'U1: VNA receiver dynamic range' }
+        includeU2: { type: boolean, default: true, description: 'U2: Calibration-kit characterization tolerance' }
+        includeU3: { type: boolean, default: true, description: 'U3: Measurement-cable phase stability' }
+        includeU4: { type: boolean, default: true, description: 'U4: Probe-contact repeatability' }
+        includeU5: { type: boolean, default: true, description: 'U5: Ambient temperature drift' }
+        confidenceLevel: { type: number, default: 0.95, minimum: 0.50, maximum: 0.999 }
+      required: [includeU1, includeU2, includeU3, includeU4, includeU5, confidenceLevel]
+
+    LeqGciAnalysisRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        projectId: { $ref: '#/components/schemas/Id' }
+        dutId:     { $ref: '#/components/schemas/Id' }
+        measurementIds:
+          type: array
+          minItems: 1
+          items: { $ref: '#/components/schemas/Id' }
+        anchorPlan:       { $ref: '#/components/schemas/AnchorPlan' }
+        uncertaintyModel: { $ref: '#/components/schemas/UncertaintyModel' }
+        callbackUrl:      { type: string, format: uri }
+      required: [projectId, dutId, measurementIds, anchorPlan]
+
+    LeqGciResult:
+      type: object
+      additionalProperties: false
+      properties:
+        leqMm:
+          type: object
+          additionalProperties: false
+          properties:
+            op1: { type: number }
+            op2: { type: number }
+            op3: { type: number }
+          required: [op1, op2, op3]
+        leqUncertaintyMm:
+          type: object
+          additionalProperties: false
+          properties:
+            op1: { type: number }
+            op2: { type: number }
+            op3: { type: number }
+          required: [op1, op2, op3]
+        gci: { type: number }
+        decisionBand:
+          type: string
+          enum: [satisfied, boundary_zone, design_correction_required]
+      required: [leqMm, gci, decisionBand]
+
+    JobAcceptedResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        jobId:  { $ref: '#/components/schemas/Id' }
+        status: { type: string, const: accepted }
+      required: [jobId, status]
+
+    Job:
+      allOf:
+        - $ref: '#/components/schemas/ResourceMetadata'
+        - type: object
+          additionalProperties: false
+          properties:
+            jobType:
+              type: string
+              enum: [leq_gci_analysis, mhl_package_build, file_ingest, hash_verification]
+            status:
+              type: string
+              enum: [accepted, queued, running, succeeded, failed, canceled]
+            progress: { type: number, minimum: 0, maximum: 100 }
+            result:   { type: object }
+            error:
+              type: object
+              additionalProperties: false
+              properties:
+                code:    { type: string }
+                message: { type: string }
+          required: [jobType, status]
+
+    JobListResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        items: { type: array, items: { $ref: '#/components/schemas/Job' } }
+        nextCursor: { type: [string, 'null'] }
+      required: [items]
+
+    MhlElement:
+      type: object
+      additionalProperties: false
+      properties:
+        elementCode: { type: string, enum: [MHL1, MHL2, MHL3, MHL4, MHL5] }
+        title:       { type: string }
+        sha256:      { $ref: '#/components/schemas/Sha256Hex' }
+      required: [elementCode, sha256]
+
+    HashChainNode:
+      type: object
+      additionalProperties: false
+      properties:
+        sequenceIndex: { type: integer, minimum: 0, description: 'Position in chain (0 = genesis = MHL1)' }
+        elementCode:   { type: string, enum: [MHL1, MHL2, MHL3, MHL4, MHL5] }
+        sha256:
+          $ref: '#/components/schemas/Sha256Hex'
+          description: 'SHA-256 of (elementContent || previousSha256)'
+        previousSha256:
+          oneOf:
+            - $ref: '#/components/schemas/Sha256Hex'
+            - type: 'null'
+          description: 'Hash of previous chain node. NULL only for sequenceIndex=0 (genesis).'
+        algorithm:
+          type: string
+          const: SHA-256
+          description: 'Aligned with NIST FIPS PUB 180-4'
+      required: [sequenceIndex, elementCode, sha256, algorithm]
+
+    MhlPackage:
+      allOf:
+        - $ref: '#/components/schemas/ResourceMetadata'
+        - type: object
+          additionalProperties: false
+          properties:
+            projectId:      { $ref: '#/components/schemas/Id' }
+            dutId:          { $ref: '#/components/schemas/Id' }
+            measurementIds:
+              type: array
+              items: { $ref: '#/components/schemas/Id' }
+            elements:
+              type: array
+              minItems: 5
+              maxItems: 5
+              items: { $ref: '#/components/schemas/MhlElement' }
+              description: 'Five MHL elements (MHL1-MHL5) per V4.0 §X.A'
+            hashChain:
+              type: array
+              minItems: 5
+              items: { $ref: '#/components/schemas/HashChainNode' }
+              description: |
+                Sequential SHA-256 hash chain aligned with NIST FIPS PUB 180-4.
+                Each node references the previous node's hash, forming an immutable
+                chain anchored at MHL1 (genesis).
+            manifestSha256:
+              $ref: '#/components/schemas/Sha256Hex'
+              description: 'Top-level hash covering the entire manifest (final node of hashChain)'
+            packageStatus:
+              type: string
+              enum: [building, sealed, verified, broken]
+            sealedAt:
+              type: string
+              format: date-time
+          required: [projectId, dutId, elements, hashChain, manifestSha256, packageStatus]
+
+    MhlPackageBuildRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        projectId:      { $ref: '#/components/schemas/Id' }
+        dutId:          { $ref: '#/components/schemas/Id' }
+        measurementIds:
+          type: array
+          minItems: 1
+          items: { $ref: '#/components/schemas/Id' }
+        callbackUrl:    { type: string, format: uri }
+      required: [projectId, dutId, measurementIds]
+
+    MhlPackageListResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        items: { type: array, items: { $ref: '#/components/schemas/MhlPackage' } }
+        nextCursor: { type: [string, 'null'] }
+      required: [items]
+
+    HashVerificationRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        mhlPackageId: { $ref: '#/components/schemas/Id' }
+        expectedManifestSha256: { $ref: '#/components/schemas/Sha256Hex' }
+      required: [mhlPackageId]
+
+    HashVerificationResult:
+      type: object
+      additionalProperties: false
+      properties:
+        mhlPackageId: { $ref: '#/components/schemas/Id' }
+        verified:     { type: boolean }
+        algorithm:    { type: string, const: SHA-256 }
+        verifiedAt:   { type: string, format: date-time }
+        brokenAt:
+          oneOf:
+            - { type: integer, minimum: 0, description: 'sequenceIndex of first broken node, if any' }
+            - { type: 'null' }
+      required: [mhlPackageId, verified, algorithm, verifiedAt]
+
+    AuditEvent:
+      allOf:
+        - $ref: '#/components/schemas/ResourceMetadata'
+        - type: object
+          additionalProperties: false
+          properties:
+            tenantId:   { $ref: '#/components/schemas/Id' }
+            actor:      { type: string }
+            action:     { type: string }
+            objectType: { type: string }
+            objectId:   { type: string }
+            outcome:    { type: string, enum: [success, failure] }
+            requestId:  { type: string }
+            ipAddress:  { type: string }
+          required: [tenantId, actor, action, objectType, outcome]
+
+    AuditEventListResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        items: { type: array, items: { $ref: '#/components/schemas/AuditEvent' } }
+        nextCursor: { type: [string, 'null'] }
+      required: [items]
+
+    WebhookAnalysisCompletedPayload:
+      type: object
+      additionalProperties: false
+      properties:
+        eventType:     { type: string, const: analysis.completed }
+        jobId:         { $ref: '#/components/schemas/Id' }
+        projectId:     { $ref: '#/components/schemas/Id' }
+        dutId:         { $ref: '#/components/schemas/Id' }
+        completedAt:   { type: string, format: date-time }
+        result:        { $ref: '#/components/schemas/LeqGciResult' }
+        signatureSha256: { $ref: '#/components/schemas/Sha256Hex' }
+      required: [eventType, jobId, completedAt]

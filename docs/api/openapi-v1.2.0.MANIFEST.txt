@@ -1,0 +1,21 @@
+========================================================================
+Leq / GCI / MHL Enterprise API Specification v1.2.0
+Cryptographic Manifest (SHA-256, NIST FIPS PUB 180-4)
+========================================================================
+Author:        Chin-Yu Hsu (Independent Researcher)
+ORCID:         0009-0009-6267-7897
+Generated at:  2026-05-27T10:57:00+08:00 (CST)
+Standard:      OpenAPI 3.1 + JSON Schema 2020-12
+Verification:  0 errors / 0 warnings on editor.swagger.io
+------------------------------------------------------------------------
+399184955a129724...   55.8 KB  openapi-leq-gci-mhl-v1.2.0.yaml
+af4e23373640544a...  331.8 KB  openapi-leq-gci-mhl-v1.2.0-resolved.yaml
+9253c0c34c0144aa...   80.4 KB  openapi-leq-gci-mhl-v1.2.0.json
+099e2098a18cdd1c...  441.2 KB  openapi-leq-gci-mhl-v1.2.0-resolved.json
+========================================================================
+Companion artifacts:
+  - V4.0 paper:      10.5281/zenodo.20382496
+  - V2.4 foundation: 10.5281/zenodo.20341571
+  - v0.1.0 software: 10.5281/zenodo.20384916
+  - SwaggerHub:      app.swaggerhub.com/apis/chinyuorganization/leq-gci-mhl-enterprise-api/1.2.0
+========================================================================
