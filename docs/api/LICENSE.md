@@ -2,7 +2,7 @@
 
 **Copyright © 2026 Chin-Yu Hsu (Independent Researcher)**  
 **ORCID**: [0009-0009-6267-7897](https://orcid.org/0009-0009-6267-7897)  
-**Contact**: api-support@costryx.net  
+**Contact**: chinyu@costryx.net  
 
 ---
 
@@ -33,4 +33,4 @@ This public contract intentionally excludes proprietary calibration matrices, DU
 
 ## Inquiries
 
-For commercial licensing inquiries: api-support@costryx.net
+For commercial licensing inquiries: chinyu@costryx.net
