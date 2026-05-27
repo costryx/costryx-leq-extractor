@@ -52,10 +52,12 @@ __license__ = "Apache-2.0"
 # ─────────────────────────────────────────────────────────────────
 # DOI references (Costryx three-layer IP architecture)
 # ─────────────────────────────────────────────────────────────────
-# Layer 1 — V4.0 Working Report (the methodology)
-__paper_doi__ = "10.5281/zenodo.20382496"
-__paper_concept_doi__ = "10.5281/zenodo.20382495"
-__paper_url__ = "https://doi.org/10.5281/zenodo.20382496"
+# Layer 1 — V4.0.1 Working Report (the methodology, latest version)
+__paper_doi__ = "10.5281/zenodo.20411061"
+__paper_version__ = "V4.0.1"
+__paper_doi_v4_0__ = "10.5281/zenodo.20382496"  # historical
+__paper_concept_doi__ = "10.5281/zenodo.20382495"  # always latest
+__paper_url__ = "https://doi.org/10.5281/zenodo.20411061"
 
 # Layer 2 — Reference Software (this package)
 __software_doi__ = "10.5281/zenodo.20384916"
