@@ -25,7 +25,7 @@
 |---|---|
 | Paper (V4.0) | 10.5281/zenodo.20382496 (CC-BY-4.0) |
 | Software (v0.1.0) | 10.5281/zenodo.20384916 (MIT) |
-| **API Spec (v1.2.0)** | **[10.5281/zenodo.20405124]
+| **API Spec (v1.2.0)** | **[10.5281/zenodo.20405124](https://doi.org/10.5281/zenodo.20405124) (Proprietary)** |
 
 ## Disclosure Boundary
 
