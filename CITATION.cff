@@ -6,172 +6,99 @@
 # ─────────────────────────────────────────────────────────────────────────────
 
 cff-version: 1.2.0
-message: >-
-  If you use this software, the OpenAPI specification it implements,
-  or the methodology described in the companion papers, please cite
-  the appropriate artifact(s) below. The Costryx three-layer IP
-  architecture (Paper → Software → API Contract) is anchored by
-  permanent Zenodo DOIs and protected by USPTO / TIPO / PCT filings.
-
-# ──────────────────── PRIMARY ARTIFACT (this repository) ─────────────────────
-type: software
-title: "costryx-leq-extractor"
+message: "If you use this software, please cite both the software (Layer 2) and the methodology paper (Layer 1)."
+title: "costryx-leq-extractor: Official Reference Implementation of the L_eq Extraction Framework"
 abstract: >-
-  Reference implementation of the Equivalent Spatial Length (Leq) metrology
-  framework for sub-THz interconnects (1.6 T – 3.2 T), including PCIe 8.0
-  PAM4 256 GT/s channel validation under a fixed reference plane. Provides
-  the executable counterpart (Layer 2) of the Costryx three-layer IP
-  architecture.
+Official open-source reference implementation of the Equivalent Spatial
+Length (L_eq) extraction framework for sub-THz interconnect channel
+validation under a fixed reference plane (256 GT/s PAM4, PCIe 8.0, OIF
+CEI-224G/448G).
 
-  The public Zenodo release (v0.1.0) is the immutable, citable reference
-  snapshot aligned with the V4.0 working report. Active development
-  continues under the V3.5 internal series on the GitHub `main` branch.
-
+This package is the foundational extractor (Layer 2 of the Costryx
+three-layer IP architecture) supporting the V4.0.1 methodology paper.
+Active development continues under the V3.5 internal development series
+on the GitHub main branch, with v0.1.0 as the immutable Zenodo
+reference snapshot.
+type: software
 version: "0.1.0"
-date-released: "2026-05-25"
-doi: "10.5281/zenodo.20384916"
-url: "https://costryx.github.io/costryx-leq-extractor/api-viewer/"
-repository-code: "https://github.com/costryx/costryx-leq-extractor"
+date-released: "2026-05-26"
 license: Apache-2.0
-keywords:
-  - signal integrity
-  - sub-THz interconnect
-  - equivalent spatial length
-  - Leq metrology
-  - PCIe 8.0
-  - PAM4
-  - SerDes
-  - SHA-256
-  - NIST FIPS PUB 180-4
-  - JCGM 100:2008
-  - ISO IEC 17025
-  - audit trail
-  - hash chain
-  - MHL manifest
-  - three-anchor decision rule
-
+repository-code: "https://github.com/costryx/costryx-leq-extractor"
+url: "https://github.com/costryx/costryx-leq-extractor"
+doi: "10.5281/zenodo.20384916"
 authors:
-  - family-names: Hsu
-    given-names: Chin-Yu
-    orcid: "https://orcid.org/0009-0009-6267-7897"
-    affiliation: "Independent Researcher"
-    email: "chinyu@costryx.net"
-
-# ────────────────────── PREFERRED CITATION (Layer 3 API) ─────────────────────
-# When a user runs `gh cite costryx/costryx-leq-extractor` or clicks
-# "Cite this repository" in GitHub, this Layer 3 API specification is the
-# preferred citation because it represents the public contract surface and
-# the most recent permanent DOI in the three-layer architecture.
-
-preferred-citation:
-  type: software
-  title: "Leq / GCI / MHL Enterprise API Specification (OpenAPI 3.1) v1.2.0"
-  version: "1.2.0"
-  year: 2026
-  month: 5
-  date-released: "2026-05-27"
-  doi: "10.5281/zenodo.20405124"
-  url: "https://doi.org/10.5281/zenodo.20405124"
-  publisher:
-    name: "Zenodo"
-  abstract: >-
-    Multi-tenant enterprise API specification (OpenAPI 3.1.0 + JSON Schema
-    2020-12) for sub-THz interconnect metrology. 22 paths / 33 operations /
-    48 schemas across 11 tags. 4 servers (production / sandbox /
-    audit-readonly / tenant-isolated). 4 security schemes (OAuth2 / OIDC /
-    mTLS / API Key). 1 webhook (analysisCompleted). SHA-256 cryptographic
-    manifest aligned with NIST FIPS PUB 180-4. Verified by editor.swagger.io
-    with 0 errors / 0 warnings. Layer 3 of the Costryx three-layer IP
-    architecture.
-  license: LicenseRef-Proprietary-Costryx
-  authors:
-    - family-names: Hsu
-      given-names: Chin-Yu
-      orcid: "https://orcid.org/0009-0009-6267-7897"
-      affiliation: "Independent Researcher"
-      email: "chinyu@costryx.net"
-  keywords:
-    - OpenAPI 3.1
-    - REST API
-    - Sub-THz interconnect
-    - Signal integrity
-    - PCIe 8.0
-    - PAM4
-    - SerDes
-    - Equivalent spatial length
-    - Leq metrology
-    - SHA-256
-    - NIST FIPS PUB 180-4
-    - JCGM 100:2008
-    - ISO IEC 17025
-    - Audit trail
-    - Multi-tenant API
-    - Enterprise contract
-    - Three-anchor decision rule
-    - Hash chain
-    - MHL manifest
-    - Channel validation
-
-# ─────────────────────── ADDITIONAL REFERENCES (Layer 1) ─────────────────────
-# Companion academic papers that establish the theoretical foundation.
-
+- family-names: Hsu
+given-names: Chin-Yu
+email: chinyu@costryx.net
+orcid: "https://orcid.org/0009-0009-6267-7897"
+affiliation: "Independent Researcher, New Taipei City, Taiwan"
+keywords:
+- signal-integrity
+- sub-THz-interconnect
+- equivalent-spatial-length
+- Leq-metrology
+- PCIe-8.0
+- PAM4
+- SerDes
+- SHA-256
+- NIST-FIPS-PUB-180-4
+- JCGM-100-2008
+- ISO-IEC-17025
+- audit-trail
+- MHL-manifest
+- three-anchor-decision-rule
+- VNA
+identifiers:
+- type: doi
+value: "10.5281/zenodo.20384916"
+description: "Software release v0.1.0 (Layer 2) — this package"
+- type: url
+value: "https://github.com/costryx/costryx-leq-extractor"
+description: "GitHub repository"
 references:
-  - type: report
-    title: >-
-      256 GT/s PAM4 Channel Validation Under a Fixed Reference Plane —
-      Differential-Mode Phase Residual, Analytical Theory of Equivalent
-      Spatial Length, and Its Application to Sub-THz Interconnect
-      Characterization (V4.0 Working Report)
-    year: 2026
-    month: 5
-    date-released: "2026-05-25"
-    doi: "10.5281/zenodo.20382496"
-    url: "https://doi.org/10.5281/zenodo.20382496"
-    license: CC-BY-4.0
-    authors:
-      - family-names: Hsu
-        given-names: Chin-Yu
-        orcid: "https://orcid.org/0009-0009-6267-7897"
-        affiliation: "Independent Researcher"
-    abstract: >-
-      Layer 1 (Paper) of the Costryx three-layer IP architecture. Establishes
-      the analytical theory of Equivalent Spatial Length (Leq) for sub-THz
-      interconnects under a fixed reference plane, including the PCIe 8.0
-      three-anchor (64 / 96 / 128 GHz) decision rule, σ_Leq five-source GUM
-      Type A/B uncertainty propagation, and the Measurement Hash Ledger (MHL)
-      methodology.
-
-  - type: report
-    title: >-
-      Equivalent Spatial Length in 1.6 T – 3.2 T Interconnects (V2.4)
-    year: 2026
-    month: 5
-    date-released: "2026-05-24"
-    doi: "10.5281/zenodo.20341571"
-    url: "https://doi.org/10.5281/zenodo.20341571"
-    license: CC-BY-4.0
-    authors:
-      - family-names: Hsu
-        given-names: Chin-Yu
-        orcid: "https://orcid.org/0009-0009-6267-7897"
-        affiliation: "Independent Researcher"
-    abstract: >-
-      Foundational working paper (V2.4) introducing the Equivalent Spatial
-      Length (Leq) framework for 1.6 T to 3.2 T high-speed interconnects.
-      Predecessor to the V4.0 working report and the v0.1.0 reference
-      implementation.
-
-# ────────────────────────────── METADATA ─────────────────────────────────────
-# IP sovereignty notice (informational, not a CFF standard field).
-# Patent protection: USPTO Provisional × 6, TIPO Invention × 6+, PCT × 2.
-# Earliest priority date: 2026-02-02.
-# PCT applicant: PhysLayer IP Holdings LLC.
-# This CFF file is informational; commercial use is governed by
-# the Apache-2.0 LICENSE (for software) and the Proprietary license
-# referenced in docs/api-viewer/ (for the OpenAPI specification).
-
-contact:
-  - family-names: Hsu
-    given-names: Chin-Yu
-    email: "chinyu@costryx.net"
-    orcid: "https://orcid.org/0009-0009-6267-7897"
+- type: report
+title: "256 GT/s PAM4 Channel Validation Under a Fixed Reference Plane: Differential-Mode Phase-Residual Analytical Theory of Equivalent Spatial Length and Its Application to Sub-THz Interconnect Characterization"
+authors:
+- family-names: Hsu
+given-names: Chin-Yu
+orcid: "https://orcid.org/0009-0009-6267-7897"
+year: 2026
+version: "V4.0.1"
+date-released: "2026-05-27"
+publisher:
+name: Zenodo
+doi: "10.5281/zenodo.20411061"
+notes: >-
+Layer 1 methodology paper (latest V4.0.1, May 27, 2026).
+Previous version V4.0 (DOI: 10.5281/zenodo.20382496, May 26, 2026)
+contained a software DOI typo; V4.0.1 corrects this.
+Concept DOI 10.5281/zenodo.20382495 always resolves to the latest version.
+- type: software
+title: "Leq/GCI/MHL Enterprise API Specification (OpenAPI 3.1)"
+authors:
+- family-names: Hsu
+given-names: Chin-Yu
+orcid: "https://orcid.org/0009-0009-6267-7897"
+year: 2026
+version: "v1.2.0"
+date-released: "2026-05-27"
+publisher:
+name: Zenodo
+doi: "10.5281/zenodo.20405124"
+notes: >-
+Layer 3 enterprise API contract (22 paths / 33 operations /
+48 schemas / 11 tags). License: Proprietary (Costryx).
+Interactive viewer: https://costryx.github.io/costryx-leq-extractor/api-viewer/
+- type: report
+title: "From 110 GHz to 220 GHz: Fixture-Invariant Extraction of Equivalent Spatial Length in 1.6T/3.2T Interconnects — A Reference-Plane Transfer Framework for Millimeter-Scale Geometric Convergence"
+authors:
+- family-names: Hsu
+given-names: Chin-Yu
+orcid: "https://orcid.org/0009-0009-6267-7897"
+year: 2026
+version: "V2.4"
+date-released: "2026-05-22"
+publisher:
+name: Zenodo
+doi: "10.5281/zenodo.20341571"
+notes: "Layer 1 preceding research family (V2.4 foundation paper)."
