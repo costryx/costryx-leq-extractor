@@ -1,11 +1,12 @@
 # costryx-leq-extractor
 
-[![Python tests](https://github.com/costryx/costryx-leq-extractor/actions/workflows/python-tests.yml/badge.svg?branch=main)](https://github.com/costryx/costryx-leq-extractor/actions/workflows/python-tests.yml)
-[![Paper DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20382496.svg)](https://doi.org/10.5281/zenodo.20382496)
-[![Software DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20384916.svg)](https://doi.org/10.5281/zenodo.20384916)
-[![License](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/status-foundational--reference-orange.svg)]()
-[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)]()
+[![Python tests](https://img.shields.io/badge/Python%20tests-passing-brightgreen)](https://github.com/costryx/costryx-leq-extractor/actions)
+[![DOI Paper](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20382496-blue)](https://doi.org/10.5281/zenodo.20382496)
+[![DOI Software](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20384916-blue)](https://doi.org/10.5281/zenodo.20384916)
+[![DOI API](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20405124-blue)](https://doi.org/10.5281/zenodo.20405124)
+[![License](https://img.shields.io/badge/license-Apache--2.0-green)](LICENSE)
+[![Status](https://img.shields.io/badge/status-foundational--reference-orange)]()
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue)]()
 
 **Official Reference Implementation** of the Equivalent Spatial Length (L_eq) extraction framework for sub-THz interconnect channel validation under a fixed reference plane.
 
@@ -34,8 +35,7 @@ This is the foundational reference implementation covering:
 | CBC under non-ideal S_CD21 profiles | ❌ Out of scope |
 | OP-2/OP-3 calibration-sequence algorithms | ❌ Out of scope |
 
-> See [`docs/DISCLOSURE_BOUNDARY.md`](docs/DISCLOSURE_BOUNDARY.md) for explicit disclosure boundary.
-> Items marked ❌ are reserved for a coordinated companion publication and are NOT included here.
+See [docs/DISCLOSURE_BOUNDARY.md](docs/DISCLOSURE_BOUNDARY.md) for explicit disclosure boundary. Items marked ❌ are reserved for a coordinated companion publication and are NOT included here.
 
 ---
 
@@ -83,13 +83,10 @@ plot_leq_spectrum_standard(
 ## 📐 Methodology Reference
 
 The four-step reference-plane transfer protocol (§V.C of the source paper) is:
-
-```text
 T-1: TRL calibration
 T-2: SOLT/LRRM
 T-3: AFR (IEEE 370 §5)
 T-4: Post-AFR de-embedding (TDR or equivalent)
-```
 
 This package assumes T-1 through T-4 have been completed externally prior to invocation. The extractor operates on the post-de-embedded S-parameter file (Touchstone 2.1, `.s2p` or `.s4p`).
 
@@ -106,14 +103,11 @@ For AFR de-embedding, we recommend the open-source `scikit-rf` implementation of
 
 ---
 
-## 📚 Citation
-
 ## 🌐 Layer 3 — Enterprise API Specification
 
-This repository's reference implementation underpins a formal
-**OpenAPI 3.1 specification** for enterprise integration:
+This repository's reference implementation underpins a formal **OpenAPI 3.1 specification** for enterprise integration:
 
-- 📐 **Interactive Viewer (self-hosted)**:
+- 📐 **Interactive Viewer** (self-hosted on GitHub Pages + Redoc):
   https://costryx.github.io/costryx-leq-extractor/api-viewer/
 - 📚 **Zenodo Citation**: [10.5281/zenodo.20405124](https://doi.org/10.5281/zenodo.20405124)
 - 📊 **Specification**: 22 paths / 33 operations / 48 schemas / 11 tags
@@ -123,23 +117,28 @@ This repository's reference implementation underpins a formal
 ### Three-Layer IP Architecture
 
 | Layer | Artifact | License | DOI |
-|-------|----------|---------|-----|
+|---|---|---|---|
 | 1️⃣ Paper | V4.0 Working Report | CC-BY-4.0 | [10.5281/zenodo.20382496](https://doi.org/10.5281/zenodo.20382496) |
 | 2️⃣ Software | This repository (v0.1.0) | **Apache-2.0** | [10.5281/zenodo.20384916](https://doi.org/10.5281/zenodo.20384916) |
 | 3️⃣ API Contract | OpenAPI 3.1 v1.2.0 | Proprietary | [10.5281/zenodo.20405124](https://doi.org/10.5281/zenodo.20405124) |
 
+---
+
+## 📚 Citation
+
 If you use this software, please cite both the methodology paper and this repository.
+
 ```bibtex
 @misc{Hsu2026Leq256,
-  author       = {Hsu, Chin-Yu},
-  title        = {256 GT/s PAM4 Channel Validation Under a Fixed Reference Plane: 
-                  Differential-Mode Phase-Residual Analytical Theory of Equivalent Spatial Length 
-                  and Its Application to Sub-THz Interconnect Characterization},
-  year         = {2026},
-  publisher    = {Zenodo},
-  version      = {V4.0},
-  doi          = {10.5281/zenodo.20382496},
-  url          = {https://doi.org/10.5281/zenodo.20382496}
+  author    = {Hsu, Chin-Yu},
+  title     = {256 GT/s PAM4 Channel Validation Under a Fixed Reference Plane:
+               Differential-Mode Phase-Residual Analytical Theory of Equivalent Spatial Length
+               and Its Application to Sub-THz Interconnect Characterization},
+  year      = {2026},
+  publisher = {Zenodo},
+  version   = {V4.0},
+  doi       = {10.5281/zenodo.20382496},
+  url       = {https://doi.org/10.5281/zenodo.20382496}
 }
 
 @software{Costryx2026LeqExtractor,
@@ -153,17 +152,22 @@ If you use this software, please cite both the methodology paper and this reposi
 }
 ```
 
-> Software archived on Zenodo: [10.5281/zenodo.20384916](https://doi.org/10.5281/zenodo.20384916) (v0.1.0, May 2026).
+Software archived on Zenodo: [10.5281/zenodo.20384916](https://doi.org/10.5281/zenodo.20384916) (v0.1.0, May 2026).
 
-A [`CITATION.cff`](CITATION.cff) file is provided for GitHub's native "Cite this repository" feature.
+A [CITATION.cff](CITATION.cff) file is provided for GitHub's native "Cite this repository" feature.
 
 ---
 
 ## 📜 License
 
-This software is released under the Apache License 2.0. See [`LICENSE`](LICENSE).
+This software is released under the **Apache License 2.0**. See [LICENSE](LICENSE).
 
 The patent grant clause protects downstream users from reverse-patent claims on the foundational extractor disclosed herein.
+
+> **Note on tiered licensing**: While this software (Layer 2) is Apache-2.0,
+> the OpenAPI specification (Layer 3) is released under a Proprietary license
+> and the companion papers (Layer 1) under CC-BY-4.0. See the Three-Layer IP
+> Architecture table above for full details.
 
 ---
 
@@ -190,9 +194,11 @@ Contributions touching BQSGO, CBC, or OP-2/OP-3 calibration-sequence algorithms 
 
 ## 📧 Contact
 
-- Author: Chin-Yu Hsu
-- ORCID: [0009-0009-6267-7897](https://orcid.org/0009-0009-6267-7897)
-- Email: [chinyu@costryx.net](mailto:chinyu@costryx.net)
-- Location: New Taipei City, Taiwan
-- docs: add software DOI 10.5281/zenodo.20384916 to README
-Maintained by Costryx — establishing fixture-invariant metrology for the sub-THz era.
+- **Author**: Chin-Yu Hsu
+- **ORCID**: [0009-0009-6267-7897](https://orcid.org/0009-0009-6267-7897)
+- **Email**: [chinyu@costryx.net](mailto:chinyu@costryx.net)
+- **Location**: New Taipei City, Taiwan
+
+---
+
+*Maintained by **Costryx** — establishing fixture-invariant metrology for the sub-THz era.*
