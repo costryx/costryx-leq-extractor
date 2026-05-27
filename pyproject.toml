@@ -2,13 +2,40 @@
 requires = ["setuptools>=64", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[project]   
+[project]
 name = "costryx-leq-extractor"
 version = "0.1.0"
-description = "Official reference implementation of the L_eq extraction framework for sub-THz interconnect channel validation."
+description = "Layer 2 reference implementation of the Equivalent Spatial Length (L_eq) extraction framework for sub-THz interconnect channel validation (256 GT/s PAM4, PCIe 8.0)."
+readme = "README.md"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Chin-Yu Hsu", email = "chinyu@costryx.net"},
+]
+maintainers = [
+    {name = "Chin-Yu Hsu", email = "chinyu@costryx.net"},
+]
+keywords = [
+    "signal-integrity",
+    "sub-THz-interconnect",
+    "equivalent-spatial-length",
+    "Leq-metrology",
+    "PCIe-8.0",
+    "PAM4",
+    "SerDes",
+    "SHA-256",
+    "NIST-FIPS-PUB-180-4",
+    "JCGM-100-2008",
+    "ISO-IEC-17025",
+    "audit-trail",
+    "MHL-manifest",
+    "three-anchor-decision-rule",
+    "VNA",
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
     "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
@@ -16,24 +43,39 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Operating System :: OS Independent",
+    "Natural Language :: English",
 ]
-readme = "README.md"
-license = {text = "Apache-2.0"}
-authors = [{name = "Chin-Yu Hsu", email = "chinyu@costryx.net"}]
-keywords = ["signal-integrity", "sub-THz", "PAM4", "metrology", "VNA", "S-parameters", "PCIe-8.0", "SerDes"]
-requires-python = ">=3.10"
-dependencies = ["numpy>=1.24", "matplotlib>=3.7"]
+dependencies = [
+    "numpy>=1.24",
+    "matplotlib>=3.7",
+    "scikit-rf>=0.30",
+]
 
 [project.optional-dependencies]
-touchstone = ["scikit-rf>=0.30"]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+]
+docs = [
+    "mkdocs>=1.5",
+    "mkdocs-material>=9.0",
+]
 
 [project.urls]
 Homepage = "https://github.com/costryx/costryx-leq-extractor"
-Paper = "https://doi.org/10.5281/zenodo.20382496"
-PaperConceptDOI = "https://doi.org/10.5281/zenodo.20382495"
-Documentation = "https://github.com/costryx/costryx-leq-extractor/blob/main/README.md"
-Issues = "https://github.com/costryx/costryx-leq-extractor/issues"
+Documentation = "https://costryx.github.io/costryx-leq-extractor/api-viewer/"
 Repository = "https://github.com/costryx/costryx-leq-extractor"
+Issues = "https://github.com/costryx/costryx-leq-extractor/issues"
+"Paper (V4.0)" = "https://doi.org/10.5281/zenodo.20382496"
+"Paper Concept DOI" = "https://doi.org/10.5281/zenodo.20382495"
+"Software DOI" = "https://doi.org/10.5281/zenodo.20384916"
+"API Specification" = "https://doi.org/10.5281/zenodo.20405124"
+"API Viewer" = "https://costryx.github.io/costryx-leq-extractor/api-viewer/"
+"Author ORCID" = "https://orcid.org/0009-0009-6267-7897"
+"Funding" = "mailto:api-support@costryx.net"
 
 [tool.setuptools.packages.find]
 where = ["src"]
