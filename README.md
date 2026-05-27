@@ -1,7 +1,7 @@
 # costryx-leq-extractor
 
 [![Python tests](https://img.shields.io/badge/Python%20tests-passing-brightgreen)](https://github.com/costryx/costryx-leq-extractor/actions)
-[![DOI Paper](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20382496-blue)](https://doi.org/10.5281/zenodo.20382496)
+[![DOI Paper](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20411061-blue)](https://doi.org/10.5281/zenodo.20411061)
 [![DOI Software](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20384916-blue)](https://doi.org/10.5281/zenodo.20384916)
 [![DOI API](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20405124-blue)](https://doi.org/10.5281/zenodo.20405124)
 [![License](https://img.shields.io/badge/license-Apache--2.0-green)](LICENSE)
@@ -12,7 +12,7 @@
 
 This repository implements the foundational extractor disclosed in:
 
-> Hsu, C.-Y. (2026). *256 GT/s PAM4 Channel Validation Under a Fixed Reference Plane: Differential-Mode Phase-Residual Analytical Theory of Equivalent Spatial Length and Its Application to Sub-THz Interconnect Characterization* (V4.0). Zenodo. DOI: [10.5281/zenodo.20382496](https://doi.org/10.5281/zenodo.20382496).
+> Hsu, C.-Y. (2026). *256 GT/s PAM4 Channel Validation Under a Fixed Reference Plane: Differential-Mode Phase-Residual Analytical Theory of Equivalent Spatial Length and Its Application to Sub-THz Interconnect Characterization* (V4.0.1). Zenodo. DOI: [10.5281/zenodo.20411061](https://doi.org/10.5281/zenodo.20411061).
 
 ---
 
@@ -118,7 +118,7 @@ This repository's reference implementation underpins a formal **OpenAPI 3.1 spec
 
 | Layer | Artifact | License | DOI |
 |---|---|---|---|
-| 1️⃣ Paper | V4.0 Working Report | CC-BY-4.0 | [10.5281/zenodo.20382496](https://doi.org/10.5281/zenodo.20382496) |
+| 1️⃣ Paper | V4.0.1 Working Report | CC-BY-4.0 | [10.5281/zenodo.20411061](https://doi.org/10.5281/zenodo.20411061) |
 | 2️⃣ Software | This repository (v0.1.0) | **Apache-2.0** | [10.5281/zenodo.20384916](https://doi.org/10.5281/zenodo.20384916) |
 | 3️⃣ API Contract | OpenAPI 3.1 v1.2.0 | Proprietary | [10.5281/zenodo.20405124](https://doi.org/10.5281/zenodo.20405124) |
 
@@ -136,9 +136,9 @@ If you use this software, please cite both the methodology paper and this reposi
                and Its Application to Sub-THz Interconnect Characterization},
   year      = {2026},
   publisher = {Zenodo},
-  version   = {V4.0},
-  doi       = {10.5281/zenodo.20382496},
-  url       = {https://doi.org/10.5281/zenodo.20382496}
+  version  = {V4.0.1},
+  doi       = {10.5281/zenodo.20411061},
+  url       = {https://doi.org/10.5281/zenodo.20411061}
 }
 
 @software{Costryx2026LeqExtractor,
