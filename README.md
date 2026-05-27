@@ -108,8 +108,27 @@ For AFR de-embedding, we recommend the open-source `scikit-rf` implementation of
 
 ## 📚 Citation
 
-If you use this software, please cite both the methodology paper and this repository.
+## 🌐 Layer 3 — Enterprise API Specification
 
+This repository's reference implementation underpins a formal
+**OpenAPI 3.1 specification** for enterprise integration:
+
+- 📐 **Interactive Viewer (self-hosted)**:
+  https://costryx.github.io/costryx-leq-extractor/api-viewer/
+- 📚 **Zenodo Citation**: [10.5281/zenodo.20405124](https://doi.org/10.5281/zenodo.20405124)
+- 📊 **Specification**: 22 paths / 33 operations / 48 schemas / 11 tags
+- 🔐 **SHA-256 Manifest**: NIST FIPS PUB 180-4 aligned
+- ⚖️ **License**: Proprietary (Layer 3 only — software remains Apache-2.0)
+
+### Three-Layer IP Architecture
+
+| Layer | Artifact | License | DOI |
+|-------|----------|---------|-----|
+| 1️⃣ Paper | V4.0 Working Report | CC-BY-4.0 | [10.5281/zenodo.20382496](https://doi.org/10.5281/zenodo.20382496) |
+| 2️⃣ Software | This repository (v0.1.0) | **Apache-2.0** | [10.5281/zenodo.20384916](https://doi.org/10.5281/zenodo.20384916) |
+| 3️⃣ API Contract | OpenAPI 3.1 v1.2.0 | Proprietary | [10.5281/zenodo.20405124](https://doi.org/10.5281/zenodo.20405124) |
+
+If you use this software, please cite both the methodology paper and this repository.
 ```bibtex
 @misc{Hsu2026Leq256,
   author       = {Hsu, Chin-Yu},
@@ -129,12 +148,12 @@ If you use this software, please cite both the methodology paper and this reposi
   year      = {2026},
   publisher = {Zenodo},
   version   = {v0.1.0},
-  doi       = {10.5281/zenodo.20384917},
-  url       = {https://doi.org/10.5281/zenodo.20384917}
+  doi       = {10.5281/zenodo.20384916},
+  url       = {https://doi.org/10.5281/zenodo.20384916}
 }
 ```
 
-> Software archived on Zenodo: [10.5281/zenodo.20384917](https://doi.org/10.5281/zenodo.20384917) (v0.1.0, May 2026).
+> Software archived on Zenodo: [10.5281/zenodo.20384916](https://doi.org/10.5281/zenodo.20384916) (v0.1.0, May 2026).
 
 A [`CITATION.cff`](CITATION.cff) file is provided for GitHub's native "Cite this repository" feature.
 
@@ -175,5 +194,5 @@ Contributions touching BQSGO, CBC, or OP-2/OP-3 calibration-sequence algorithms 
 - ORCID: [0009-0009-6267-7897](https://orcid.org/0009-0009-6267-7897)
 - Email: [chinyu@costryx.net](mailto:chinyu@costryx.net)
 - Location: New Taipei City, Taiwan
-- docs: add software DOI 10.5281/zenodo.20384917 to README
+- docs: add software DOI 10.5281/zenodo.20384916 to README
 Maintained by Costryx — establishing fixture-invariant metrology for the sub-THz era.
