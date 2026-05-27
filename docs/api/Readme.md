@@ -39,7 +39,7 @@
 
 Proprietary. See [`LICENSE.md`](./LICENSE.md). Production deployment requires a commercial license.
 
-**Contact**: api-support@costryx.net  
+**Contact**: chinyu@costryx.net  
 **Author**: Chin-Yu Hsu (ORCID: [0009-0009-6267-7897](https://orcid.org/0009-0009-6267-7897))
 
 ## 📚 Citation
