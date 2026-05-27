@@ -22,12 +22,17 @@ abstract: >-
   PAM4 256 GT/s channel validation under a fixed reference plane. Provides
   the executable counterpart (Layer 2) of the Costryx three-layer IP
   architecture.
+
+  The public Zenodo release (v0.1.0) is the immutable, citable reference
+  snapshot aligned with the V4.0 working report. Active development
+  continues under the V3.5 internal series on the GitHub `main` branch.
+
 version: "0.1.0"
 date-released: "2026-05-25"
 doi: "10.5281/zenodo.20384916"
-url: "https://github.com/costryx/costryx-leq-extractor"
+url: "https://costryx.github.io/costryx-leq-extractor/api-viewer/"
 repository-code: "https://github.com/costryx/costryx-leq-extractor"
-license: MIT
+license: Apache-2.0
 keywords:
   - signal integrity
   - sub-THz interconnect
@@ -161,8 +166,9 @@ references:
 # Patent protection: USPTO Provisional × 6, TIPO Invention × 6+, PCT × 2.
 # Earliest priority date: 2026-02-02.
 # PCT applicant: PhysLayer IP Holdings LLC.
-# This CFF file is informational; commercial use is governed by docs/api/LICENSE.md
-# and the patent licenses referenced therein.
+# This CFF file is informational; commercial use is governed by
+# the Apache-2.0 LICENSE (for software) and the Proprietary license
+# referenced in docs/api-viewer/ (for the OpenAPI specification).
 
 contact:
   - family-names: Hsu
