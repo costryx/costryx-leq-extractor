@@ -96,7 +96,7 @@ For AFR de-embedding, we recommend the open-source `scikit-rf` implementation of
 
 ## 🗺️ Roadmap
 
-- **v0.1.0** (current): Foundational reference implementation aligned with paper V4.0
+- **v0.1.0** (current): Foundational reference implementation aligned with paper V4.0.1
 - **v0.1.x**: Bug fixes and documentation improvements
 - **v0.2.x** (planned): Optional synthetic demo datasets for users without sub-THz VNA hardware (release timing TBD)
 - **v1.0.0** (future, ~Q3 2026): Aligned with companion publication on continuous-spectrum L_eq(f) visualization standard
@@ -111,7 +111,8 @@ This repository's reference implementation underpins a formal **OpenAPI 3.1 spec
   https://costryx.github.io/costryx-leq-extractor/api-viewer/
 - 📚 **Zenodo Citation**: [10.5281/zenodo.20405124](https://doi.org/10.5281/zenodo.20405124)
 - 📊 **Specification**: 22 paths / 33 operations / 48 schemas / 11 tags
-- 🔐 **SHA-256 Manifest**: NIST FIPS PUB 180-4 aligned
+- 🔐 **SHA-256 Manifest**: NIST FIPS PUB 180-4 aligned, auto-refreshed by GitHub Actions
+  ([sha256.yml](.github/workflows/sha256.yml) · [openapi-v1.2.0.MANIFEST.txt](docs/api-viewer/openapi-v1.2.0.MANIFEST.txt))
 - ⚖️ **License**: Proprietary (Layer 3 only — software remains Apache-2.0)
 
 ### Three-Layer IP Architecture
