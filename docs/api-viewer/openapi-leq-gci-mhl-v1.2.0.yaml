@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: Leq / GCI / MHL Enterprise API
   version: 1.2.0
-  summary: Swagger Editor ready enterprise API for sub-THz interconnect metrology workflows.
+  summary: Enterprise API for sub-THz interconnect metrology workflows.
   description: |
     Multi-tenant enterprise API for projects, DUTs, files, measurements,
     Leq/GCI analysis, MHL packaging, SHA-256 verification, and audit trails.
@@ -11,15 +11,14 @@ info:
     DUT routing coordinates, stack-up details, and vendor-specific confidential settings.
 
     Companion artifacts:
-    - V4.0 working report:    https://doi.org/10.5281/zenodo.20382496
+    - V4.0.1 working report:  https://doi.org/10.5281/zenodo.20382496
     - V2.4 foundation:        https://doi.org/10.5281/zenodo.20341571
     - Reference impl v0.1.0:  https://doi.org/10.5281/zenodo.20384916
     - GitHub:                 https://github.com/costryx/costryx-leq-extractor
   termsOfService: https://costryx.net/terms
   contact:
     name: API Support
-    email: api-support@costryx.net
-    url: https://costryx.net/support
+    email: chinyu@costryx.net
   license:
     name: Proprietary
     url: https://costryx.net/license
