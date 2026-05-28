@@ -76,7 +76,7 @@ Issues = "https://github.com/costryx/costryx-leq-extractor/issues"
 "API Specification" = "https://doi.org/10.5281/zenodo.20405124"
 "API Viewer" = "https://costryx.github.io/costryx-leq-extractor/api-viewer/"
 "Author ORCID" = "https://orcid.org/0009-0009-6267-7897"
-"Funding" = "mailto:api-support@costryx.net"
+
 
 [tool.setuptools.packages.find]
 where = ["src"]
