@@ -2,7 +2,7 @@
 # CITATION.cff — Citation File Format v1.2.0
 # Repository: costryx/costryx-leq-extractor
 # Standard:   https://citation-file-format.github.io/
-# Last update: 2026-05-27
+# Last update: 2026-05-28
 # ─────────────────────────────────────────────────────────────────────────────
 
 cff-version: 1.2.0
@@ -44,16 +44,20 @@ keywords:
   - JCGM-100-2008
   - ISO-IEC-17025
   - audit-trail
+  - eu-ai-act-article-14
   - MHL-manifest
   - three-anchor-decision-rule
   - VNA
-identifiers:
+ identifiers:
   - type: doi
     value: "10.5281/zenodo.20384916"
     description: "Software release v0.1.0 (Layer 2) — this package"
   - type: url
     value: "https://github.com/costryx/costryx-leq-extractor"
     description: "GitHub repository"
+  - type: url
+    value: "https://github.com/costryx/costryx-leq-extractor/blob/35ad573733ab54c8bf9acaa8f2a5548bd99fd274/docs/api-viewer/openapi-v1.2.0.MANIFEST.txt"
+    description: "Audit anchor — V4.0.1 SHA-256 manifest at commit 35ad573 (auto-generated 2026-05-28T22:13:14+0800)"
 references:
   - type: report
     title: "256 GT/s PAM4 Channel Validation Under a Fixed Reference Plane: Differential-Mode Phase-Residual Analytical Theory of Equivalent Spatial Length and Its Application to Sub-THz Interconnect Characterization"
