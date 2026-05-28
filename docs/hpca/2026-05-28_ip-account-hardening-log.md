@@ -1,10 +1,10 @@
 # IP Account Hardening Log — 2026-05-28
 
-**Project:** Costryx Leq / GCI / MHL Enterprise API
-**Repository:** https://github.com/costryx/costryx-leq-extractor
-**Author:** Chin-Yu Hsu (Independent Researcher) — ORCID 0009-0009-6267-7897
-**HPCA Reference:** V1.6 (EU AI Act Article 14 — Human Oversight)
-**Companion White Paper:** V3.0 Seven Walls (Wall 5 — Gradient-origin Provenance)
+- **Project:** Costryx Leq / GCI / MHL Enterprise API
+- **Repository:** https://github.com/costryx/costryx-leq-extractor
+- **Author:** Chin-Yu Hsu (Independent Researcher) — ORCID 0009-0009-6267-7897
+- **HPCA Reference:** V1.6 (EU AI Act Article 14 — Human Oversight)
+- **Companion White Paper:** V3.0 Seven Walls (Wall 5 — Gradient-origin Provenance)
 
 ---
 
@@ -66,6 +66,7 @@ Changes from V4.0:
 - `openapi-v1.2.0.MANIFEST.txt` — auto-refreshed by CI
 - Manifest commit: `35ad573733ab54c8bf9acaa8f2a5548bd99fd274`
 - Manifest generated at: `2026-05-28T22:13:14+0800 (CST)`
+- Manifest URL (immutable at commit): https://github.com/costryx/costryx-leq-extractor/blob/35ad573733ab54c8bf9acaa8f2a5548bd99fd274/docs/api-viewer/openapi-v1.2.0.MANIFEST.txt
 
 ## 3. Mapping to EU AI Act Article 14
 
@@ -95,7 +96,8 @@ Changes from V4.0:
 
 ## 6. Changelog
 
-- 2026-05-27 — V4.0 spec uploaded to Zenodo (DOI 10.5281/zenodo.20382496)
+- 2026-05-27 — V4.0 OpenAPI spec uploaded to Zenodo (concept DOI 10.5281/zenodo.20382496)
+- 2026-05-28 — V4.0.1 paper published on Zenodo (DOI 10.5281/zenodo.20411061)
 - 2026-05-28 19:00 — White paper V3.0 audit completed
 - 2026-05-28 21:00 — V4.0.1 spec corrections committed
 - 2026-05-28 21:30 — pyproject.toml Funding URL fix
@@ -106,3 +108,10 @@ Changes from V4.0:
 *This log is reproducible. Any third party can clone the repository at
 commit `35ad573` and re-compute the four SHA-256 values listed above to
 verify the integrity of the V4.0.1 OpenAPI specification corpus.*
+
+---
+
+**SPDX-License-Identifier:** CC-BY-4.0
+**Document version:** 1.0 (2026-05-28)
+**Audit anchor commit:** 35ad573733ab54c8bf9acaa8f2a5548bd99fd274
+**Verification:** `git checkout 35ad573 && cd docs/api-viewer && sha256sum openapi-leq-gci-mhl-v1.2.0*.{yaml,json}`
